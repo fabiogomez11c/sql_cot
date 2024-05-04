@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "sql-cot"
+version = "0.1.0"
+description = ""
+authors = ["Fabio Gomez <fabiogomez11c@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+datasets = "^2.19.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
