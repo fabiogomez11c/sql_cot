@@ -69,10 +69,6 @@ config_bootstrap = dict(
     max_labeled_demos=8,
     num_candidate_programs=10
 )
-# teleprompter = BootstrapFewShotWithRandomSearch(
-#     metric=exact_match,
-#     **config_bootstrap
-# )
 config_mipro = dict(
     num_candidates=5,
     init_temperature=1.0,
@@ -83,10 +79,6 @@ teleprompter = MIPRO(
 )
 print("OPTIMIZATION +++++++++++++++++++++")
 print("COT with context")
-# opt_cot_with_context = teleprompter.compile(
-#     cot_with_context,
-#     trainset=train_examples,
-# )
 opt_cot_with_context = teleprompter.compile(
     cot_with_context,
     trainset=train_examples,
@@ -99,4 +91,4 @@ opt_cot_with_context = teleprompter.compile(
 # evalute after optim
 print("EVAL AFTER OPTIMIZATION +++++++++++++++++++++")
 print("COT with context")
-evaluate(cot_with_context)
+evaluate(opt_cot_with_context)
