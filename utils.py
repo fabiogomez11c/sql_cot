@@ -1,7 +1,6 @@
 from typing import List
 from datasets.arrow_dataset import Dataset
 from dspy import Example
-from datasets.arrow_dataset import Dataset
 from datasets import load_dataset
 
 
@@ -16,7 +15,7 @@ def examples_from_dataset(dataset: Dataset) -> List[Example]:
     ]
 
 
-def load_dataset() -> Dataset:
+def load_sql_dataset() -> Dataset:
     """Load the dataset from the b-mc2/sql-create-context dataset"""
     dataset = Dataset.from_dict(load_dataset("b-mc2/sql-create-context"))
     dataset = dataset.select(range(80))
