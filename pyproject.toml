@@ -9,6 +9,10 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.10"
 dspy-ai = "^2.4.9"
+langchain = "^0.1.19"
+langchain-together = "^0.1.1"
+sqlvalidator = "^0.0.20"
+sqlglot = {extras = ["rs"], version = "^23.15.1"}
 
 
 [tool.poetry.group.dev.dependencies]
