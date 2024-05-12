@@ -1,7 +1,8 @@
 from pydantic_models import SQLQuery, Tables
 from eval import execute_query_same_str
-from langchain_together import ChatTogether  # noqa
+from langchain_together import ChatTogether, Together  # noqa
 from langchain_openai.chat_models import ChatOpenAI  # noqa
+from langchain_openai import OpenAI  # noqa
 from utils import load_sql_dataset  # noqa
 from gen_ai import generate
 from templates import DummyTable, SQLPrompt
@@ -13,7 +14,7 @@ model = ChatTogether(
     # model="mistralai/Mixtral-8x7B-Instruct-v0.1",
     temperature=0.0
 )
-# model = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.0)
+# model = OpenAI(temperature=0.0)
 
 print('Downloading the data')
 # data = load_sql_dataset()
