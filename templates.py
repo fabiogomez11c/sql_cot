@@ -1,5 +1,6 @@
 from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.output_parsers import JsonOutputParser  # noqa
+from langchain.output_parsers import PydanticOutputParser
 from pydantic import BaseModel
 from typing import List
 
@@ -10,7 +11,7 @@ class BasePrompt:
 
     def __init__(self, pydantic_model: BaseModel):
         self.pydantic_model = pydantic_model
-        self.parser = JsonOutputParser(pydantic_object=pydantic_model)
+        self.parser = PydanticOutputParser(pydantic_object=pydantic_model)
         self.prompt_template = PromptTemplate(
             template=self.template,
             input_variables=self.input_variables,

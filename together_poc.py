@@ -6,14 +6,14 @@ from utils import load_sql_dataset  # noqa
 from gen_ai import generate
 from templates import DummyTable, SQLPrompt
 
-# model = ChatTogether(
-#     # together_api_key="YOUR_API_KEY",
-#     # model="meta-llama/Llama-2-70b-chat-hf",
-#     model="meta-llama/Llama-3-70b-chat-hf",
-#     # model="mistralai/Mixtral-8x7B-Instruct-v0.1",
-#     temperature=0.0
-# )
-model = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.0)
+model = ChatTogether(
+    # together_api_key="YOUR_API_KEY",
+    # model="meta-llama/Llama-2-70b-chat-hf",
+    model="meta-llama/Llama-3-70b-chat-hf",
+    # model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+    temperature=0.0
+)
+# model = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.0)
 
 print('Downloading the data')
 # data = load_sql_dataset()
@@ -29,9 +29,7 @@ dummy_table = generate(
     model=model,
     _input={'user_context': instance['context'], 'user_question': instance['question']}
 )
-print(dummy_table)
-tables = Tables.from_dict(dummy_table['tables'])
-tables_dict = tables.create_tables()
+tables_dict = dummy_table.create_tables()
 
 result = generate(
     prompt=SQLPrompt(pydantic_model=SQLQuery),
@@ -40,4 +38,4 @@ result = generate(
 )
 print(result)
 
-print(execute_query_same_str(instance['answer'], result['query'], tables_dict))
+print(execute_query_same_str(instance['answer'], result.query, tables_dict))
