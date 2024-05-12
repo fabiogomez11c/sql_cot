@@ -19,7 +19,7 @@ def load_sql_dataset() -> Dataset:
     """Load the dataset from the b-mc2/sql-create-context dataset"""
     dataset = Dataset.from_dict(load_dataset("b-mc2/sql-create-context"))
     dataset = dataset.select(range(80))
-    dataset = dataset.shuffle()
+    # dataset = dataset.shuffle()
     dataset = dataset.train_test_split(test_size=0.2)
     dataset = dataset.map(lambda x: x['train'])
     dataset = dataset.remove_columns(['train'])
