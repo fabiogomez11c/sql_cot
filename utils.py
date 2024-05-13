@@ -2,6 +2,7 @@ from typing import List
 from datasets.arrow_dataset import Dataset
 from dspy import Example
 from datasets import load_dataset
+import json
 
 
 def examples_from_dataset(dataset: Dataset) -> List[Example]:
@@ -18,9 +19,16 @@ def examples_from_dataset(dataset: Dataset) -> List[Example]:
 def load_sql_dataset() -> Dataset:
     """Load the dataset from the b-mc2/sql-create-context dataset"""
     dataset = Dataset.from_dict(load_dataset("b-mc2/sql-create-context"))
-    dataset = dataset.select(range(100))
-    dataset = dataset.shuffle()
-    dataset = dataset.train_test_split(test_size=0.2)
-    dataset = dataset.map(lambda x: x['train'])
-    dataset = dataset.remove_columns(['train'])
+    dataset = dataset.select(range(500))
+    # dataset = dataset.shuffle()
+    # dataset = dataset.train_test_split(test_size=0.2)
+    # dataset = dataset.map(lambda x: x['train'])
+    # dataset = dataset.remove_columns(['train'])
     return dataset
+
+
+def load_dict_dataset() -> dict:
+    """Load the dataset from the data.json file and return it as a dictionary"""
+    with open("data.json", "r") as file:
+        data = json.load(file)
+    return data
