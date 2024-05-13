@@ -28,7 +28,7 @@ class RetryOutputParserInvoke(RetryOutputParser):
             except OutputParserException as e:
                 if retries == self.max_retries:
                     raise e
-                else:
+                else:  # TODO error with completion being a string
                     retries += 1
                     completion = self.retry_chain.run(
                         prompt=prompt_value.to_string(), completion=completion.content
