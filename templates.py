@@ -28,7 +28,7 @@ class DummyTable(BasePrompt):
 
 
 class SQLPrompt(BasePrompt):
-    template: str = "Answer the question with the format:\n{format_instructions}\nGive me a query that could answer the question: {user_input}?\nContext table: {context_table}"  # noqa
+    template: str = "Answer the question with the format:\n{format_instructions}\nGive me a query that could answer the question: {user_input}?\nContext table: {context_table}\nStrictly follow the given format and do not return explanations."  # noqa
     input_variables: List[str] = ['user_input', 'context_table']
 
     def __init__(self, pydantic_model: BaseModel):

@@ -30,6 +30,8 @@ class RetryOutputParserInvoke(RetryOutputParser):
                     raise e
                 else:  # TODO error with completion being a string
                     retries += 1
+                    if isinstance(completion, str):
+                        completion = AIMessage(content=completion)
                     completion = self.retry_chain.run(
                         prompt=prompt_value.to_string(), completion=completion.content
                     )
