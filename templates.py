@@ -1,6 +1,6 @@
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser  # noqa
-from langchain.output_parsers import PydanticOutputParser
+from langchain.output_parsers import PydanticOutputParser  # noqa
 from pydantic import BaseModel
 from typing import List
 
@@ -11,7 +11,7 @@ class BasePrompt:
 
     def __init__(self, pydantic_model: BaseModel):
         self.pydantic_model = pydantic_model
-        self.parser = PydanticOutputParser(pydantic_object=pydantic_model)
+        self.parser = JsonOutputParser(pydantic_object=pydantic_model)
         self.prompt_template = PromptTemplate(
             template=self.template,
             input_variables=self.input_variables,
@@ -20,7 +20,7 @@ class BasePrompt:
 
 
 class DummyTable(BasePrompt):
-    template: str = "Generate a dummy table with 5 rows that corresponds to:\n{user_context}\nThat could answer a question like:\n{user_question}\nWith the following format:\n{format_instructions}"  # noqa
+    template: str = "Generate a dummy table with 5 rows that corresponds to:\n{user_context}\nThat could answer a question like:\n{user_question}\nWith the following format:\n{format_instructions}\nStrictly follow the given format."  # noqa
     input_variables: List[str] = ['user_context', 'user_question']
 
     def __init__(self, pydantic_model: BaseModel):
