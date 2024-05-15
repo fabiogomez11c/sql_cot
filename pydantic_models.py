@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing_extensions import Literal
 from typing import Dict, Any, List
 
 
@@ -48,3 +49,8 @@ class Tables(BaseModel):
     def from_dict(cls, data: Dict[str, Any]):
         """Create tables from a dictionary"""
         return cls(tables={table_name: Table.from_dict(table) for table_name, table in data.items()})
+
+
+class LLMEval(BaseModel):
+    """Choice"""
+    choice: Literal['A', 'B', 'C'] = Field(..., description='Choice between A, B or C')
