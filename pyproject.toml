@@ -14,6 +14,7 @@ langchain-together = "^0.1.1"
 sqlvalidator = "^0.0.20"
 sqlglot = {extras = ["rs"], version = "^23.15.1"}
 langsmith = "^0.1.57"
+jupyter = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
