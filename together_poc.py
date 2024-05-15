@@ -1,5 +1,5 @@
 from pydantic_models import SQLQuery
-from eval import execute_query_same_str
+from eval import execute_query_same_str, evaluate_with_llm
 from langchain_together import ChatTogether  # noqa
 from langchain_openai.chat_models import ChatOpenAI  # noqa
 from utils import load_dict_dataset  # noqa
@@ -12,7 +12,8 @@ temperature = 0.0
 # model_name = "meta-llama/Llama-3-70b-chat-hf"
 # model_name = "gpt-3.5-turbo-0125"
 # model_name = "meta-llama/Llama-2-70b-chat-hf"
-model_name = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+# model_name = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+model_name = "togethercomputer/CodeLlama-34b-Instruct"
 model = ChatTogether(
     model=model_name,
     temperature=temperature
@@ -36,10 +37,12 @@ for instance in progress_bar:
             _input={'user_input': instance['question'], 'context_table': instance['context']}
         )
         is_correct = execute_query_same_str(instance['answer'], result['query'], tables_dict)
+        votes = evaluate_with_llm(instance['answer'], result['query'], instance['context'], instance['question'])
     except Exception as e:
         result = {'query': ''}
         error = str(e).split('\n')[0]  # Get only the first line of the error message
         is_correct = (False, instance['answer'], '', error)
+        votes = ['', '', '']
 
     results.append(
         dict(
@@ -48,6 +51,7 @@ for instance in progress_bar:
             context=instance['context'],
             result=result['query'],
             is_correct=is_correct[0],
+            votes=votes,
             model_name=model_name,
             correct=is_correct[1],
             prediction=is_correct[2],
