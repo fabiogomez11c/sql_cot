@@ -3,3 +3,4 @@ __pycache__/
 .vscode
 app.log
 database/
+.DS_Store
