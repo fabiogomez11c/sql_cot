@@ -76,15 +76,7 @@ def extract_create_table_commands(folders: List[str]) -> dict:
 
 
 def extract_database_schema(folders: List[str]) -> dict:
-    """
-    Extracts the schema from all SQLite databases in the given folders.
-
-    Args:
-    folders (List[str]): A list of folder names within the 'database' directory.
-
-    Returns:
-    dict: A dictionary where keys are table names and values are the corresponding SQL CREATE statements.
-    """
+    """Extracts the schema from all SQLite databases in the given folders."""
     result = {}
     for folder in folders:
         folder_path = os.path.join('database', folder)
