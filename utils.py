@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from datasets.arrow_dataset import Dataset
 from dspy import Example
 from datasets import load_dataset
@@ -45,7 +45,7 @@ def get_database_folders() -> List[str]:
 
 
 def get_sql_files_in_folder(folder_path: str) -> List[str]:
-    """Retrieve all .sqlite files inside the specified folder."""
+    """Retrieve all .sql files inside the specified folder."""
     files = [file for file in os.listdir(folder_path) if file.endswith('.sql')]
     return files
 
@@ -57,7 +57,7 @@ def get_sqlite_files_in_folder(folder_path: str) -> List[str]:
 
 
 def extract_create_table_commands(folders: List[str]) -> dict:
-    """Extracts CREATE TABLE commands from .sqlite files in given folders."""
+    """Extracts CREATE TABLE commands from .sql files in given folders."""
     all_commands = {}
     for folder in folders:
         folder_path = os.path.join('database', folder)
@@ -100,3 +100,24 @@ def extract_database_schema(folders: List[str]) -> dict:
             result.update(schema)
 
     return result
+
+
+def load_prepare_dev_dataset() -> List[Dict]:
+    """Load the dev.json dataset and prepare the data according to each question"""
+    # load json
+    with open('dev.json', 'r') as file:
+        data = json.load(file)
+
+    # iterate over each question and get the create context of the table
+    for question in data:
+        # get the sqlite files
+        question_table = question['db_id']
+        folder_path = os.path.join('database', question_table)
+        sqlite_files = get_sqlite_files_in_folder(folder_path)
+        sqlite_files = [os.path.join('database', question_table, sqlite_file) for sqlite_file in sqlite_files]
+
+        # extract schema
+        schema = extract_database_schema([question_table])
+        question['context'] = "; ".join(schema.values())
+
+    return data
