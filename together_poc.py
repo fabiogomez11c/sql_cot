@@ -1,13 +1,14 @@
 from pydantic_models import SQLQuery
-from eval import execute_query_same_str, evaluate_with_llm
 from langchain_together import ChatTogether  # noqa
 from langchain_openai.chat_models import ChatOpenAI  # noqa
-from utils import load_prepare_dev_dataset  # noqa
+from utils import load_prepare_dev_dataset, store_results  # noqa
 from gen_ai import generate
+from evaluation import evaluate
 from templates import SQLPrompt
 from tqdm import tqdm
 import pandas as pd
 
+reference = ''
 temperature = 0.0
 # model_name = "meta-llama/Llama-3-70b-chat-hf"
 model_name = "gpt-3.5-turbo-0125"
@@ -55,14 +56,12 @@ for instance in progress_bar:
     result_queries.append(result['query'].strip())
     gold_queries.append(f"{instance['query'].strip()}\t{instance['db_id']}")
 
-# Export results
-df = pd.DataFrame(results)
-df.to_csv(f'./results/results_{model_name.replace("/", "_")}_{temperature}.csv', index=False)
-
-with open(f"./results/results_{model_name.replace('/', '_')}_{temperature}.sql", "w") as f:
-    for result in result_queries:
-        f.write(result + "\n")
-
-with open(f"./results/gold_{model_name.replace('/', '_')}_{temperature}.sql", "w") as f:
-    for result in gold_queries:
-        f.write(result + "\n")
+# Export results and run evaluation
+store_results(
+    _results=results,
+    _result_queries=result_queries,
+    _gold_queries=gold_queries,
+    _model_name=model_name,
+    _temperature=temperature,
+    _reference=reference
+)

@@ -2,6 +2,7 @@ from typing import List, Dict
 from datasets.arrow_dataset import Dataset
 from dspy import Example
 from datasets import load_dataset
+import pandas as pd
 import json
 import os
 import re
@@ -102,6 +103,23 @@ def extract_database_schema(folders: List[str]) -> dict:
     return result
 
 
+def get_table_data(table: str, db: str) -> str:
+    """Get the data from the specified table and return it as a string with a nice formatting specifying
+    the column and the rows of the table."""
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+    # Safely parameterize table name to avoid SQL injection
+    cursor.execute("PRAGMA table_info(" + table + ")")
+    columns = [description[1] for description in cursor.fetchall()]
+    # Safely parameterize table name to avoid SQL injection
+    cursor.execute("SELECT * FROM " + table)
+    rows = cursor.fetchall()
+    formatted_data = f"Table: {table}\nColumns: {', '.join(columns)}\nRows:\n"
+    for row in rows:
+        formatted_data += ' | '.join(str(item) for item in row) + '\n'
+    return formatted_data + "\n"
+
+
 def load_prepare_dev_dataset() -> List[Dict]:
     """Load the dev.json dataset and prepare the data according to each question"""
     # load json
@@ -118,6 +136,27 @@ def load_prepare_dev_dataset() -> List[Dict]:
 
         # extract schema
         schema = extract_database_schema([question_table])
-        question['context'] = "; ".join(schema.values())
+        tables = ""
+        for table in schema.keys():
+            tables += get_table_data(table, sqlite_files[0])
+        question['context'] = tables
 
     return data
+
+
+def store_results(_results: List[Dict], _result_queries: List[str], _gold_queries: List[str], _model_name: str, _temperature: str, _reference: str) -> None:
+    """Store the results in several files"""
+
+    # Export results and run evaluation
+    df = pd.DataFrame(_results)
+    df.to_csv(f'./results/results_{_model_name.replace("/", "_")}_{_temperature}_{_reference}.csv', index=False)
+
+    results_path = f"./results/results_{_model_name.replace('/', '_')}_{_temperature}_{_reference}.sql"
+    with open(results_path, "w") as f:
+        for result in _result_queries:
+            f.write(result + "\n")
+
+    gold_path = f"./results/gold_{_model_name.replace('/', '_')}_{_temperature}_{_reference}.sql"
+    with open(gold_path, "w") as f:
+        for result in _gold_queries:
+            f.write(result + "\n")
