@@ -20,3 +20,13 @@ class ExactMatch:
         cursor.execute(query)
         query_result = cursor.fetchone()
         return query_result
+
+    def evaluate_query(self, query: str, gold_query: str, database: str) -> bool:
+        """
+        Evaluates with Exact Match metric the query with respect to the
+        gold query given the database
+        """
+        query_result = self._execute_query(query, database)
+        gold_result = self._execute_query(gold_query, database)
+
+        return query_result == gold_result

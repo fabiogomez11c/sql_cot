@@ -34,6 +34,18 @@ class TestExactMatch(unittest.TestCase):
         result = self.exact_match._execute_query(query, self.database)
         self.assertEqual(result[0], 16)
 
+    def test_evaluate_query(self):
+        query = "SELECT COUNT(*) FROM Activity"
+        gold_query = "SELECT COUNT(*) FROM Activity"
+        result = self.exact_match.evaluate_query(
+            query, gold_query, self.database)
+        self.assertTrue(result)
+
+        incorrect_query = "SELECT COUNT(*) FROM Activity WHERE actid = 1"
+        result = self.exact_match.evaluate_query(
+            incorrect_query, gold_query, self.database)
+        self.assertFalse(result)
+
 
 if __name__ == "__main__":
     unittest.main()
