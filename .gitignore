@@ -6,3 +6,4 @@ database/
 .DS_Store
 local_cache/
 .aider*
+spider/
