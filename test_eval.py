@@ -37,13 +37,39 @@ class TestExactMatch(unittest.TestCase):
     def test_evaluate_query(self):
         query = "SELECT COUNT(*) FROM Activity"
         gold_query = "SELECT COUNT(*) FROM Activity"
-        result = self.exact_match.evaluate_query(
-            query, gold_query, self.database)
+        result = self.exact_match.evaluate_query(query, gold_query, self.database)
         self.assertTrue(result)
 
         incorrect_query = "SELECT COUNT(*) FROM Activity WHERE actid = 1"
         result = self.exact_match.evaluate_query(
-            incorrect_query, gold_query, self.database)
+            incorrect_query, gold_query, self.database
+        )
+        self.assertFalse(result)
+
+    def test_evaluate_query_department_management(self):
+        query = "SELECT name, born_state, age FROM head ORDER BY age"
+        gold_query = "SELECT name, born_state, age FROM head ORDER BY age"
+        database = (
+            "./spider/database/department_management/department_management.sqlite"
+        )
+        result = self.exact_match.evaluate_query(query, gold_query, database)
+        self.assertTrue(result)
+
+        incorrect_query = "SELECT name, born_state, age FROM head ORDER BY name"
+        result = self.exact_match.evaluate_query(incorrect_query, gold_query, database)
+        self.assertFalse(result)
+
+    def test_evaluate_query_department_select_all(self):
+        query = "SELECT * FROM department"
+        gold_query = "SELECT * FROM department"
+        database = (
+            "./spider/database/department_management/department_management.sqlite"
+        )
+        result = self.exact_match.evaluate_query(query, gold_query, database)
+        self.assertTrue(result)
+
+        incorrect_query = "SELECT name, born_state FROM head"
+        result = self.exact_match.evaluate_query(incorrect_query, gold_query, database)
         self.assertFalse(result)
 
 
