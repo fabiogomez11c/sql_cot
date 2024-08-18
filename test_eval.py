@@ -30,6 +30,11 @@ class TestExactMatch(unittest.TestCase):
         result = self.exact_match._execute_query(query, self.database)
         self.assertIsNone(result)
 
+    def test_activity_count(self):
+        query = "SELECT COUNT(*) FROM Activity"
+        result = self.exact_match._execute_query(query, self.database)
+        self.assertEqual(result[0], 16)
+
 
 if __name__ == "__main__":
     unittest.main()
