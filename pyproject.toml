@@ -4,25 +4,16 @@ version = "0.1.0"
 description = ""
 authors = ["Fabio Gomez <fabiogomez11c@gmail.com>"]
 readme = "README.md"
-package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.10"
-dspy-ai = "^2.4.9"
-langchain = "^0.1.19"
-langchain-together = "^0.1.1"
-sqlvalidator = "^0.0.20"
-sqlglot = {extras = ["rs"], version = "^23.15.1"}
-langsmith = "^0.1.57"
-jupyter = "^1.0.0"
+python = "^3.11"
 nltk = "^3.8.1"
-parse = "^1.20.1"
-sqlparse = "^0.5.0"
-instructor = "^1.3.7"
+sqlparse = "^0.5.1"
 
 
 [tool.poetry.group.dev.dependencies]
-ipykernel = "^6.29.4"
+ipython = "^8.26.0"
+debugpy = "^1.8.5"
 
 [build-system]
 requires = ["poetry-core"]
