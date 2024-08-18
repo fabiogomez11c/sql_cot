@@ -1,5 +1,4 @@
 import sqlite3
-from IPython import embed as ipython
 
 
 class ExactMatch:

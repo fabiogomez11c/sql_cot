@@ -1,7 +1,6 @@
 import unittest
 import sqlite3
-from eval import ExactMatch  # Replace 'your_module' with the actual module name
-from IPython import embed as ipython
+from eval import ExactMatch
 
 
 class TestExactMatch(unittest.TestCase):
