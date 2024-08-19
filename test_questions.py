@@ -9,32 +9,35 @@ class TestQuestions(unittest.TestCase):
         # sample json data for testing
         self.sample_json = """
             [
-                {"question": "What is your name?"},
-                {"question": "How old are you?"},
-                {"question": "Where do you live?"}
+                {"question": "What is your name?", "db_id": "db1"},
+                {"question": "How old are you?", "db_id": "db2"},
+                {"question": "Where do you live?", "db_id": "db3"}
             ]
             """
 
     def test_question_model(self):
         # Test the Question model
-        question = Question(question="What is your name?")
+        question = Question(question="What is your name?", db_id="db1")
         self.assertEqual(question.question, "What is your name?")
+        self.assertEqual(question.db_id, "db1")
 
     def test_set_questions_model(self):
         # Test the SetQuestions model
         questions = [
-            Question(question="What is your name?"),
-            Question(question="How old are you?"),
+            Question(question="What is your name?", db_id="db1"),
+            Question(question="How old are you?", db_id="db2"),
         ]
         set_questions = SetQuestions(set_questions=questions)
         self.assertEqual(len(set_questions.set_questions), 2)
         self.assertEqual(set_questions.set_questions[0].question, "What is your name?")
+        self.assertEqual(set_questions.set_questions[0].db_id, "db1")
         self.assertEqual(set_questions.set_questions[1].question, "How old are you?")
+        self.assertEqual(set_questions.set_questions[1].db_id, "db2")
 
     @patch(
         "builtins.open",
         new_callable=mock_open,
-        read_data='[{"question": "What is your name?"}, {"question": "How old are you?"}]',
+        read_data='[{"question": "What is your name?", "db_id": "db1"}, {"question": "How old are you?", "db_id": "db2"}]',
     )  # see file: 2024-08-18.21-23-17.263.md
     def test_read_json_file_with_questions(self, mock_file):
         # Test reading questions from a JSON file
@@ -48,7 +51,9 @@ class TestQuestions(unittest.TestCase):
 
         # Check if the questions were correctly parsed
         self.assertEqual(result.set_questions[0].question, "What is your name?")
+        self.assertEqual(result.set_questions[0].db_id, "db1")
         self.assertEqual(result.set_questions[1].question, "How old are you?")
+        self.assertEqual(result.set_questions[1].db_id, "db2")
 
     def test_read_json_file_with_questions_integration(self):
         # Integration test with actual file I/O
@@ -63,8 +68,11 @@ class TestQuestions(unittest.TestCase):
 
         # Check if the questions were correctly parsed
         self.assertEqual(result.set_questions[0].question, "What is your name?")
+        self.assertEqual(result.set_questions[0].db_id, "db1")
         self.assertEqual(result.set_questions[1].question, "How old are you?")
+        self.assertEqual(result.set_questions[1].db_id, "db2")
         self.assertEqual(result.set_questions[2].question, "Where do you live?")
+        self.assertEqual(result.set_questions[2].db_id, "db3")
 
 
 if __name__ == "__main__":
