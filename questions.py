@@ -17,5 +17,5 @@ def read_json_file_with_questions(file_path: str) -> SetQuestions:
     """
     with open(file_path, "r") as json_file:
         data = json.load(json_file)
-    questions = [Question(question=q) for q in data["questions"]]
+    questions = [Question(question=q["question"]) for q in data]
     return SetQuestions(set_questions=questions)

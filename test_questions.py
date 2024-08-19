@@ -8,13 +8,11 @@ class TestQuestions(unittest.TestCase):
     def setUp(self):
         # sample json data for testing
         self.sample_json = """
-            {
-                "questions": [
-                    "What is your name?",
-                    "How old are you?",
-                    "Where do you live?"
-                ]
-            }
+            [
+                {"question": "What is your name?"},
+                {"question": "How old are you?"},
+                {"question": "Where do you live?"}
+            ]
             """
 
     def test_question_model(self):
@@ -36,7 +34,7 @@ class TestQuestions(unittest.TestCase):
     @patch(
         "builtins.open",
         new_callable=mock_open,
-        read_data='{"questions": ["What is your name?", "How old are you?"]}',
+        read_data='[{"question": "What is your name?"}, {"question": "How old are you?"}]',
     )  # see file: 2024-08-18.21-23-17.263.md
     def test_read_json_file_with_questions(self, mock_file):
         # Test reading questions from a JSON file
